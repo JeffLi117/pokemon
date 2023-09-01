@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { faSolid, faBold } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Pokedex() {
     const [pokeList, setPokeList] = useState([]);
@@ -8,12 +10,21 @@ export default function Pokedex() {
 
     const requestData = async (id) => {
         const result = [];
+        let i = id;
+        let stillMoreData = true;
         let numToStop = id + 25;
-        for (let i = id; i < numToStop; i++) {
+        while (stillMoreData) {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}/`);
             let data = await response.json();
             if (response.status === 200) {
                 result.push(data);
+                i++;
+            } else {
+                stillMoreData = false;
+            }
+
+            if (i === numToStop) {
+                setPokeList(result);
             }
         }
         setPokeList(result);
@@ -26,49 +37,14 @@ export default function Pokedex() {
     useEffect(() => {
         requestData(1);
     }, []);
-    
-    // Function to hide the loader
-    // function hideloader() {
-    //     document.getElementById('loading').style.display = 'none';
-    // }
 
-    // Function to define innerHTML for HTML table
-    // function show(data) {
-    //     let tab =
-    //         `<tr>
-    //         <th>Name</th>
-    //         <th>Office</th>
-    //         <th>Position</th>
-    //         <th>Salary</th>
-    //         </tr>`;
-    
-    //         // Loop to access all rows
-    //         for (let r of data.list) {
-    //             tab += `<tr>
-    //         <td>${r.id} </td>
-    //         <td>${r.name}</td>
-    //         <td>${r.sprites.front_default}</td>
-    //         </tr>`;
-    //         }
-    // }
-
-    // useEffect(() => {
-    //     () =>
-    //       fetch('https://localhost:7000/TeamSeason/2021')
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //           setData(data);
-    //           setLoading(false);
-    //     })
-    //   }, []);
-    
     return (
-      <div class="m-4 flex items-center justify-center">
+      <div className="m-4 flex items-center justify-center">
             {isLoading ? <div>Loading</div> : 
             <ul>
-                <div class="grid grid-cols-5 grid-rows-5 gap-2">
+                <div className="grid grid-cols-5 grid-rows-5 gap-2">
                     {pokeList.map((mon, index) =>
-                        <li key={index} class="flex items-center justify-center border-solid border-2 border-black p-2">
+                        <li key={index} className="flex items-center justify-center border-solid border-2 border-black p-2">
                             <Image
                             src={mon.sprites.front_default}
                             alt={`Pokemon sprite for pokemon with index of ${index+1}`}
@@ -78,6 +54,7 @@ export default function Pokedex() {
                         </li>
                     )}
                 </div>
+                <FontAwesomeIcon icon={faBold} />
             </ul>
             }
       </div>
