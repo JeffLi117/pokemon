@@ -8,3 +8,17 @@ span#nav_main {
   font-family: 'Pokemon Solid', sans-serif;
   color: #FFDE00;
 }
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.loading-spinner {
+  animation: rotation 1s linear infinite;
+  animation-iteration-count: infinite;
+}
