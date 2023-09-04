@@ -15,35 +15,36 @@ export default function Pokedex() {
         const result = [];
         let i = id;
         let stillMoreData = true;
-        let numToStop = id + 25;
         while (stillMoreData) {
-
-            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}/`);
-            
-            let data = await response.json();
-            if (response.status === 200) {
-                result.push(data);
-                i++;
-            } else {
+            try {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}/`);
+          
+                if (response.status === 200) {
+                  const data = await response.json();
+                  result.push(data);
+                  i++;
+                } else {
+                  console.log("stillMoreData set to false; APIs done");
+                  stillMoreData = false;
+                }
+              } catch (error) {
+                console.error("Error fetching data:", error);
                 stillMoreData = false;
-            }
-
-            if (i === numToStop) {
-                waitToSetShow(result, 1);
-            }
+              }
         }
+        console.log("should be done with while loop...");
+        waitToSetShow(result.slice(0, 25));
         setPokeList(result);
     };
 
-    const waitToSetShow = async (array, page) => {
+    const waitToSetShow = async (array) => {
         let pageFirstIndex;
-        if (page == 1) {
+        if (whichPage == 1) {
             pageFirstIndex = 0;
         } else {
-            pageFirstIndex = (page-1) * 25
+            pageFirstIndex = (whichPage-1) * 25
         }
         let pageSecondIndex = pageFirstIndex + 25;
-        await new Promise(r => setTimeout(r, 2000));
         setPokeShowing(array.slice(pageFirstIndex, pageSecondIndex));
     }
     
@@ -59,17 +60,19 @@ export default function Pokedex() {
         requestData(1);
     }, []);
 
-    // useEffect(() => {
-        
-    // }, [whichPage]);
+    useEffect(() => {
+        console.log("new whichPage is: ", whichPage);
+    }, [whichPage]);
 
     const handlePrevPg = () => {
+        console.log("Clicked handlePrevPg");
         if (whichPage > 1) {
             setWhichPage(whichPage - 1);
         }
     }
 
     const handleNextPg = () => {
+        console.log("Clicked handleNextPg");
         let numOfPages = Math.ceil(pokeList.length/25);
         if (whichPage < numOfPages) {
             setWhichPage(whichPage + 1);
@@ -99,11 +102,20 @@ export default function Pokedex() {
                         (<Loading />)}
                     </div> 
                     {pokeShowing.length > 0 && (
-                        <div className="flex items-center justify-center gap-2">
-                        <FontAwesomeIcon icon={faArrowLeft} onClick={handlePrevPg} />
-                        <div>{whichPage}</div>
-                        <FontAwesomeIcon icon={faArrowRight} onClick={handleNextPg} />
+                        <div className="flex items-center justify-center gap-4">
+                            <button className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-full" onClick={handlePrevPg}>
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                            </button>
+                            <div className="flex items-center justify-center p-4">
+                            <div className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-full">
+                                {whichPage}
+                            </div>
+                            </div>
+                            <button className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-full" onClick={handleNextPg}>
+                            <FontAwesomeIcon icon={faArrowRight} />
+                            </button>
                         </div>
+                      
                     )}
                 </ul>
             )}
