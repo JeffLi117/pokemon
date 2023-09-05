@@ -6,22 +6,20 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="relative h-screen bg-black">
-        <div className="absolute inset-0 bg-black">
+    <div className="relative flex justify-center h-screen bg-black">
+        <div className="relative bg-black">
           <Image
             src={poke_wallpaper}
             alt="Pokemon Wallpaper"
-            fill={true}
-            style={{objectFit: "contain"}}
+            width="0"
+            height="0"
+            className="h-full w-auto"
             priority={true}
-            as="style"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw"
-            rel="preload"
           />
         </div>
-        <div className="relative bg-transparent text-white text-center p-8">
+        <div className="absolute top-10 left-10 bg-transparent text-white text-center">
           <Link href="/pokedex">
-            <div className="absolute flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
               <div>W</div>
               <div>E</div>
               <div>L</div>

@@ -16,6 +16,9 @@ module.exports = {
         pokeblue: "#3B4CCA",
         pokeyellow: "#FFDE00",
         pokered: "#FF0000",
+      },
+      fontFamily: {
+        sans: ['var(--font-poppins)']
       }
     },
   },

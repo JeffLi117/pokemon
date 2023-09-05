@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Nav() {
     return (
-        <nav className="flex items-center justify-between bg-cyan-500 p-4">
+        <nav className="flex items-center justify-between bg-cyan-500 p-2 pt-1">
             <div className="flex relative items-center flex-shrink-0 text-white mr-4">
                 <Image
                     src={poke_logo}
