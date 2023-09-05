@@ -4,12 +4,14 @@ import Image from "next/image";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loading from "../components/Loading";
+import PokeClickedOverlay from "../components/PokeClickedOverlay";
 
 export default function Pokedex() {
     const [pokeList, setPokeList] = useState([]);
     const [pokeShowing, setPokeShowing] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [whichPage, setWhichPage] = useState(1);
+    const [overlayMon, setOverlayMon] = useState(null)
     
     const requestData = async (id) => {
         const result = [];
@@ -47,10 +49,6 @@ export default function Pokedex() {
         let pageSecondIndex = pageFirstIndex + 25;
         setPokeShowing(array.slice(pageFirstIndex, pageSecondIndex));
     }
-    
-    // useEffect(() => {
-    //     setIsLoading(false);
-    // }, [pokeList]);
 
     useEffect(() => {
         setIsLoading(false);
@@ -62,7 +60,13 @@ export default function Pokedex() {
 
     useEffect(() => {
         console.log("new whichPage is: ", whichPage);
+        waitToSetShow(pokeList);
     }, [whichPage]);
+
+    const clickedOn = (pokemon) => {
+        console.log(`setOverlayMon set to ${pokemon.name}`);
+        setOverlayMon(pokemon);
+    }
 
     const handlePrevPg = () => {
         console.log("Clicked handlePrevPg");
@@ -80,22 +84,29 @@ export default function Pokedex() {
     }
 
     return (
-      <div className="m-4 flex items-center justify-center">
+      <div className="p-4 h-screen flex items-center justify-center bg-slate-200">
             {isLoading ? (
                 <Loading />
             ) : (
                 <ul className="flex flex-col items-center justify-center">
+                    {overlayMon && 
+                        (<div>
+                            <PokeClickedOverlay pokemon={overlayMon} />
+                        </div> )}
                     <div className={`${(pokeShowing.length > 0) ? "grid grid-cols-5 grid-rows-5" : "flex flex-col items-center justify-center" } gap-2 m-2`}>
                         {pokeShowing.length > 0 ? (
                             pokeShowing.map((mon, index) => (
-                                <li key={index} className="flex items-center justify-center border-solid border-2 border-black p-2">
+                                <li key={index} 
+                                    className="flex items-center justify-center border-solid border-2 border-black p-2 bg-white hover:bg-slate-400 transition duration-300 ease-in-out"
+                                >
                                     <Image
                                     src={mon.sprites.front_default}
                                     alt={`Pokemon sprite for pokemon with index of ${index+1}`}
                                     width={75}
                                     height={75}
+                                    onClick={() => clickedOn(mon)}
                                     />
-                            </li>
+                                </li>
                             ))
                         ) 
                         : 

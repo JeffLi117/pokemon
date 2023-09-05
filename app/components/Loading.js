@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 export default function Loading() {
   
     return (
-      <div className="p-16 flex flex-col items-center justify-center spinner-container">
+      <div className="p-16 flex flex-col items-center justify-center spinner-container bg-slate-200">
         <div className="loading-spinner">
           <Image
             src={pokeball}
@@ -14,7 +14,7 @@ export default function Loading() {
             height={250}
           />
         </div>
-        <div className="wave text-lg text-black m-6">
+        <div className="wave text-lg text-black p-6">
             <span style={{ "--i": 1 }}>R</span>
             <span style={{ "--i": 2 }}>e</span>
             <span style={{ "--i": 3 }}>t</span>
